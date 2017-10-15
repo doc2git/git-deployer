@@ -101,7 +101,7 @@ do
   $remoteUrls[$i]=$line;
   let i=$i+1;
 done;
-echo $remoteUrls;
+echo ${remoteUrls[@]};
 
 
 # exit 154;
