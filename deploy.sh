@@ -94,6 +94,7 @@ for (( i=0; i <= 2; i++  )); do
 done
 
 # If any url is not in rule, remove it;
+git remote -v | awk '{print $2}';
 j=0;
 declare -a remoteUrls;
 for line in $(git remote -v | awk '{print $2}');
