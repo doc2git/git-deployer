@@ -96,7 +96,7 @@ done
 # If any url is not in rule, remove it;
 j=0;
 declare -a remoteUrls;
-for line in $();
+for line in $(git remote -v | awk '{print $2}');
 do
   $remoteUrls[$i]=$line;
   let i=$i+1;
