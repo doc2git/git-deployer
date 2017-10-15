@@ -7,9 +7,9 @@
 # Else, the default values will be used.
 
 
-localRepoServerPathParent="/home/myreponsitory";
+localRepoServerPathParent="/home/myrepository";
 declare -a gitServers;
-gitServerAllPrefixes[0]="git@localhost:/home/myreponsitory";
+gitServerAllPrefixes[0]="git@localhost:/home/myrepository";
 user=$(whoami);
 gitServerAllPrefixes[1]="git@github.com:$user";
 gitServerAllPrefixes[2]="git@gitee.com:$user";

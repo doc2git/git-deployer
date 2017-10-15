@@ -61,15 +61,21 @@ function gitInitIfNoBranchAll(){
 }
 
 function gitHandleUrl(){
+  match=$(git remote -v | grep $1);
+  echo $match '--------';
   if  [[ $1 =~ git@localhost\.*|git@127.0.0.1\.* ]]; then
     if [[ $(git remote -v | grep $1 ) != $1 ]]; then
-      git remote add all $1;
+      if [[ ! $match ]]; then
+        git remote add all $1;
+      fi
     else
       echo "$1 已经在映射 'all' url队列中了";
     fi
   else
     if [[ $(git remote -v | grep $1 ) != $1 ]]; then
-      git remote set-url all --add $1;
+      if [[ ! $match ]]; then
+        git remote set-url all --add $1;
+      fi
     else
       echo "$1 已经在映射 'all'  url队列中了";
     fi
@@ -130,13 +136,14 @@ if [ ! -d $localRepoServerPath ]; then
 fi
 
 
+
 function exitIfreadNoNeed(){
   while [[ true ]]; do
-    read created
-    if [[ $created == 'yes' ]]; then
-      git remote set-url all --add $1/$repoName.git;
+    read need
+    if [[ $need == 'yes' ]]; then
+      # git remote set-url all --add $1/$repoName.git;
       break;
-    elif [[ $created == 'no' ]]; then
+    elif [[ $need == 'no' ]]; then
       echo 谢谢你的使用，后会有期！
       exit 0;
     fi
