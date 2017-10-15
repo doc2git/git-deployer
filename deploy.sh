@@ -94,13 +94,11 @@ for (( i=0; i <= 2; i++  )); do
 done
 
 # If any url is not in rule, remove it;
-git remote -v | awk '{print $2}';
 j=0;
-declare -a remoteUrls;
+#declare -a remoteUrls;
 for line in $(git remote -v | awk '{print $2}');
 do
-  echo $line;
-  $remoteUrls[${j}]=$line;
+  remoteUrls[${j}]=$line;
   let j=${j}+1;
 done;
 echo ${remoteUrls[@]};
