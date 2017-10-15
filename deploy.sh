@@ -145,7 +145,7 @@ function exitIfreadNoNeed(){
 echo -n "要提交添加工作区修改，提交提交到暂存区，并推送到到映射　'all'　的所有远程 master 分支吗？  [ yes / no ]:   ";
 exitIfreadNoNeed;
 #　提交并推送到到映射　\'all\'　的所有远程 master 分支；
-echo salt >> salt.txt; git add .; git commit -am 'date +%s%N'; git push all master;
+echo salt >> salt.txt; git add .; git commit -am `date +%s%N`; git push all master;
 
 echo -n "要创建并切换到 'gh-pages'　分支，并推送到到映射　'gh-pages'　的所有远程 master 分支吗？  [ yes / no ]:   ";
 exitIfreadNoNeed;
