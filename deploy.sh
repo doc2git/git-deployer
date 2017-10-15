@@ -99,8 +99,8 @@ declare -a remoteUrls;
 for line in $(git remote -v | awk '{print $2}');
 do
   echo $line;
-  $remoteUrls[${i}]=$line;
-  let i=${i}+1;
+  $remoteUrls[${j}]=$line;
+  let j=${j}+1;
 done;
 echo ${remoteUrls[@]};
 
