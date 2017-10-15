@@ -93,6 +93,17 @@ for (( i=0; i <= 2; i++  )); do
   fi
 done
 
+# If any url is not in rule, remove it;
+j=0;
+declare -a remoteUrls;
+for line in $();
+do
+  $remoteUrls[$i]=$line;
+  let i=$i+1;
+done;
+echo $remoteUrls;
+
+
 # exit 154;
  
 #githubRepo=git@github.com:doc2git/$repoName.git
