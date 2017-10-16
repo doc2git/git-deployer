@@ -5,7 +5,7 @@ deployer="git-deployer";
 source ./$deployer/config.sh;
 
 # user=$(whoami);
-for (( i=0; i <= 2; i++  )); do
+for (( i=0; i <= $gitStorageLen; i++  )); do
   if  [[ ${gitServerAllPrefixes[$i]} =~ git@localhost\.*|git@127.0.0.1\.* ]]; then
     localRepoServerPathPrefix=${gitServerAllPrefixes[$i]};
   fi
@@ -18,7 +18,34 @@ rootDir=$(realpath .);
 echo 项目根目录: $rootDir;
 repoName=$(basename $rootDir);
 echo 正在测试的repo名: $repoName;
-localRepoServerPath="$localRepoServerPathParent/$repoName.git"
+localRepoServerPath="$localRepoServerPathParent/$repoName.git";
+gitStorageLen=${#gitServerAllPrefixes[@]};
+
+# check remote url, if it is not in rule, remote it;
+function deleteThisUrl(){
+  while [[ true ]]; do
+    read delete
+    if [[ $delete == 'yes' ]]; then
+      git remote set-url --delete all  $line;
+      break;
+    else
+      break;
+    fi
+  done
+}
+echo $gitStorageLen '34&&&&&&&&&&&&&&&&&&';
+for (( i=0; i <= $gitStorageLen; i++  )); do
+  # remove repeat; # If url matches rule, remove it; 
+  for line in $(git remote -v | awk '{print $2}'); do
+    if [[ ${gitServerAllPrefixes[$i]} != $line ]]; then
+      echo -n "$line is not match any specialed gitStorage, would you like to delte this one?  [ yes / no ]:  ";
+      deleteThisUrl $line;
+      break;
+    fi;
+  done;
+  # echo ${#remoteUrls[@]};
+done;
+
 
 # 定义函数judgeLatestCmd根据判断上一条命令的执行状态码,将尾随函数的第一个作为消息输出到stdoutput;
 function judgeLatestCmd(){
@@ -84,15 +111,11 @@ function gitHandleUrl(){
 
 
 
-for (( i=0; i <= 2; i++  )); do
 
 
-  # If url matches rule, remove it;
-  for line in $(git remote -v | awk '{print $2}'); do
-    if [[ ${gitServerAllPrefixes[$i]/$repoName} =~ $line ]]; then
-      git remote set-url --delete all  $line;
-    fi;
-  done;
+for (( i=0; i <= $gitStorageLen; i++  )); do
+
+ 
 
   if  [[ ${gitServerAllPrefixes[$i]} =~ git@localhost\.*|git@127.0.0.1\.* ]]; then
     gitInitIfNoBranchAll;
