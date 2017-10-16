@@ -176,7 +176,7 @@ verboseLength=0;
 for line in $(git remote -v | grep ' (push)' | awk '{print $2}'); do
   # for (( i=0; i < $gitStorageLen; i++  )); do
   #  echo ${gitServerAllPrefixes[$i]} '178*********';
-    if [[ ! $line =~ "${gitServerAllPrefixes[$i]}" ]]; then
+  #  if [[ ! $line =~ "${gitServerAllPrefixes[$i]}" ]]; then
        for (( n=0; n <= $uniqueLength; n++)); do
         if [[ $line == ${uniqueUris[$n]} ]]; then
           verboseUris[$verboseLength]=$line;
@@ -192,7 +192,7 @@ for line in $(git remote -v | grep ' (push)' | awk '{print $2}'); do
        done;
       echo "   ${#verboseUris[@]} 174++++++++++++++++++++++))";
       break; # 当前git仓库前缀已经匹配上了，就不选后边的仓库循环名了
-    fi
+   # fi
   # done;
 done;
 
@@ -219,57 +219,7 @@ for line in $(git remote -v | grep ' (push)' | awk '{print $2}'); do
   fi
 done;
 
-# If url matches rule, remove it; 
-# declare -a validUris;
-# declare -a inValidUris;
-# declare -a lines;
-# validLength=0;
-# invalidLength=1;
-# linesLength=0;
-# for line in $(git remote -v | grep ' (push)' | awk '{print $2}'); do
-#   linesLength=$(expr $linesLength + 1 );
-#   lines[$linesLength]=$line;
-#   for (( i=0; i < $gitStorageLen; i++  )); do
-#     if [[ $line =~ "${gitServerAllPrefixes[$i]}" ]]; then
-#       echo   "${gitServerAllPrefixes[$i]/$repoName}.git" ' matches ' $line ~~~~~~~~;
-#         validUris[$validLength]=$line;
-#         echo $validLength '+++___+++';
-#         echo ${validUris[$validLength]} '&&&&+++';
-#         validLength=$(expr $validLength + 1 );
-#         echo $validLength '+++___+++%';
-#         echo ${validUris[$validLength]} '&&&&---';
-#       continue;
-#     fi
-#   done;
-# done;
-# echo $validLength 'v%%%%%%%%>>>';
-# echo ${validUris} 'vllllllllll>>>';
-# echo ${#validUris} 'vllllllllll>>>';
-# echo $linesLength 'l%%%%%%%%>>>';
-# echo ${lines} 'llllllllll>>>';
-# echo ${#lines[@]} 'llllllllll>>>';
-# invalidLength=$linesLength;
-# invalidUris=("${lines[@]}");
-# echo $invalidLength '++++@@@';
-# echo ${#invalidUris[@]} '----@@@';
-#   for ((s=0; s < $validLength; s++)); do
-#     echo ${validUris[$s]} '&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&';
-#   done;
-#   for ((s=0; s < $invalidLength; s++)); do
-#     echo ${invalidUris[$s]} '$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$'; 
-#   done;
-# for (( q=0; q < $invalidLength; q++)); do
-#   for ((s=0; s < $validLength; s++)); do
-#     if [[ ${validUris[$s]} == ${invalidUris[$q]} ]]; then
-#       unset validUris[$s];
-#       echo "unset ${validUris[$s]} '230)))))))))++++'";
-#       invalidLength=$(expr $invalidLength - 1);
-#       s=$(expr $s - 1);
-#     fi
-#   done;
-# done;
-
- exit 183;
+# exit 183;
 
 function exitIfreadNoNeed(){
   while [[ true ]]; do
