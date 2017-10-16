@@ -85,6 +85,15 @@ function gitHandleUrl(){
 
 
 for (( i=0; i <= 2; i++  )); do
+
+
+  # If url matches rule, remove it;
+  for line in $(git remote -v | awk '{print $2}'); do
+    if [[ ${gitServerAllPrefixes[$i]/$repoName} =~ $line ]]; then
+      git remote set-url --delete all  $line;
+    fi;
+  done;
+
   if  [[ ${gitServerAllPrefixes[$i]} =~ git@localhost\.*|git@127.0.0.1\.* ]]; then
     gitInitIfNoBranchAll;
     gitHandleUrl ${gitServerAllPrefixes[$i]}/$repoName.git;
@@ -93,15 +102,6 @@ for (( i=0; i <= 2; i++  )); do
     echo -n "Is the uninitialized repository ${gitServerAllPrefixes[$i]}/$repoName ready?  [ yes / no ]:  "
     addMapIfCreated ${gitServerAllPrefixes[$i]};	
   fi
-
-
-  # If url matches rule, remove it;
-  for line in $(git remote -v | awk '{print $2}'); do
-    if [[ ${gitServerAllPrefixes[$i]} =~ $line ]]; then
-      git remote set-url --delete all  $line;
-    fi;
-  done;
-  # echo ${#remoteUrls[@]};
 
 done
 
