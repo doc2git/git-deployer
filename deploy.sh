@@ -21,30 +21,6 @@ echo 正在测试的repo名: $repoName;
 localRepoServerPath="$localRepoServerPathParent/$repoName.git";
 gitStorageLen=${#gitServerAllPrefixes[@]};
 
-# check remote url, if it is not in rule, remote it;
-function deleteThisUrl(){
-  while [[ true ]]; do
-    read delete
-    if [[ $delete == 'yes' ]]; then
-      git remote set-url --delete all  $line;
-      break;
-    else
-      break;
-    fi
-  done
-}
-echo $gitStorageLen '34&&&&&&&&&&&&&&&&&&';
-  # remove repeat; # If url matches rule, remove it; 
-for line in $(git remote -v | grep 'git (push)' | awk '{print $2}'); do
-  for (( i=0; i <= $gitStorageLen; i++  )); do
-    if [[ $line != "${gitServerAllPrefixes[$i]}*" ]]; then
-      echo -n "$line is not match any specialed gitStorage, would you like to delte this one?  [ yes / no ]:  ";
-      deleteThisUrl $line;
-      break;
-    fi;
-  done;
-  # echo ${#remoteUrls[@]};
-done;
 
 
 # 定义函数judgeLatestCmd根据判断上一条命令的执行状态码,将尾随函数的第一个作为消息输出到stdoutput;
@@ -128,6 +104,7 @@ for (( i=0; i <= $gitStorageLen; i++  )); do
 
 done
 
+
 # exit 154;
  
 #githubRepo=git@github.com:doc2git/$repoName.git
@@ -169,6 +146,32 @@ if [ ! -d $localRepoServerPath ]; then
 #    exit 1
 #  fi
 fi
+
+
+# check remote url, if it is not in rule, remote it;
+function deleteThisUrl(){
+  while [[ true ]]; do
+    read delete
+    if [[ $delete == 'yes' ]]; then
+      git remote set-url --delete all  $line;
+      break;
+    else
+      break;
+    fi
+  done
+}
+echo $gitStorageLen '34&&&&&&&&&&&&&&&&&&';
+  # remove repeat; # If url matches rule, remove it; 
+for line in $(git remote -v | grep 'git (push)' | awk '{print $2}'); do
+  for (( i=0; i <= $gitStorageLen; i++  )); do
+    if [[ $line != "${gitServerAllPrefixes[$i]}*" ]]; then
+      echo -n "$line is not match any specialed gitStorage, would you like to delte this one?  [ yes / no ]:  ";
+      deleteThisUrl $line;
+      break;
+    fi;
+  done;
+  # echo ${#remoteUrls[@]};
+done;
 
 
 
