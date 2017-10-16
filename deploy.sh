@@ -5,7 +5,7 @@ deployer="git-deployer";
 source ./$deployer/config.sh;
 
 # user=$(whoami);
-for (( i=0; i <= $gitStorageLen; i++  )); do
+for (( i=0; i < $gitStorageLen; i++  )); do
   if  [[ ${gitServerAllPrefixes[$i]} =~ git@localhost\.*|git@127.0.0.1\.* ]]; then
     localRepoServerPathPrefix=${gitServerAllPrefixes[$i]};
   fi
@@ -69,7 +69,11 @@ function gitHandleUrl(){
   if  [[ $1 =~ git@localhost\.*|git@127.0.0.1\.* ]]; then
     if [[ $(git remote -v | grep $1 ) != $1 ]]; then
       if [[ ! $match ]]; then
-        git remote add all $1;
+        if [[  $(git remote | grep '^all') ]]; then
+          git remote set-url --add all $1;
+        else
+          git remote add all $1;
+        fi;
       fi
     else
       echo "$1 已经在映射 'all' url队列中了";
@@ -89,19 +93,18 @@ function gitHandleUrl(){
 
 
 
-for (( i=0; i <= $gitStorageLen; i++  )); do
-
- 
-
+for (( i=0; i < $gitStorageLen; i++  )); do
   if  [[ ${gitServerAllPrefixes[$i]} =~ git@localhost\.*|git@127.0.0.1\.* ]]; then
+    echo ${gitServerAllPrefixes[$i]} '94---------&&&&################';
     gitInitIfNoBranchAll;
     gitHandleUrl ${gitServerAllPrefixes[$i]}/$repoName.git;
+    git remote -v | grep ${gitServerAllPrefixes[$i]};
+    echo '98%%%%%%%%%%';
     # git remote add all ${gitServerAllPrefixes[$i]}/$repoName.git;
   else
-    echo -n "Is the uninitialized repository ${gitServerAllPrefixes[$i]}/$repoName ready?  [ yes / no ]:  "
+    echo -n "Is the uninitialized repository ${gitServerAllPrefixes[$i]}/$repoName.git ready?  [ yes / no ]:  "
     addMapIfCreated ${gitServerAllPrefixes[$i]};	
   fi
-
 done
 
 
@@ -163,7 +166,7 @@ function deleteThisUrl(){
 echo $gitStorageLen '34&&&&&&&&&&&&&&&&&&';
   # remove repeat; # If url matches rule, remove it; 
 for line in $(git remote -v | grep 'git (push)' | awk '{print $2}'); do
-  for (( i=0; i <= $gitStorageLen; i++  )); do
+  for (( i=0; i < $gitStorageLen; i++  )); do
     if [[ $line != "${gitServerAllPrefixes[$i]}*" ]]; then
       echo -n "$line is not match any specialed gitStorage, would you like to delte this one?  [ yes / no ]:  ";
       deleteThisUrl $line;
