@@ -11,10 +11,9 @@ for (( i=0; i < $gitStorageLen; i++  )); do
    localRepoServerPathPrefix=${gitServerAllPrefixes[$i]};
    # 以下下行实现在没有all远程别名的情况下将config.sh中的fetchServerPrefix设为默认的fetch-url;
    # 如果现已有all远程别名,还是改.git/config比较方便，毕竟这种情况不会经常发生。
-    temp=${gitServerAllPrefixes[$i]};
-    ${gitServerAllPrefixes[$i]}=${gitServerAllPrefixes[0]};
-    ${gitServerAllPrefixes[$0]}=temp;
-   echo
+   temp=${gitServerAllPrefixes[$i]};
+   gitServerAllPrefixes[$i]=${gitServerAllPrefixes[0]};
+   gitServerAllPrefixes[0]=$temp;
   fi
   echo This gitServerPrefixes will be mapped: ${gitServerAllPrefixes[$i]};
 done
@@ -71,7 +70,6 @@ function gitInitIfNoBranchAll(){
 
 function gitHandleUrl(){
   match=$(git remote -v | grep $1);
-  echo $match '--------';
   if  [[ $1 =~ git@localhost\.*|git@127.0.0.1\.* ]]; then
     if [[ $(git remote -v | grep $1 ) != $1 ]]; then
       if [[ ! $match ]]; then
@@ -174,7 +172,6 @@ done
 for line in $(git remote -v | grep ' (push)' | awk '{print $2}'); do
   flag=false;
   for (( i=0; i < $gitStorageLen; i++  )); do
-    echo ${gitServerAllPrefixes[$i]} '209(((((((((((((';
     if [[ "$line" =~ ^${gitServerAllPrefixes[$i]}* ]]; then
       flag=true;
       break;
