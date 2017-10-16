@@ -21,3 +21,19 @@ salt
 salt
 salt
 salt
+<<<<<<< HEAD
+=======
+salt
+salt
+salt
+salt
+salt
+salt
+salt
+salt
+salt
+salt
+salt
+salt
+salt
+>>>>>>> 4a2dd9b2e7b54e07ff91558ef7262d5487691537

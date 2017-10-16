@@ -7,14 +7,8 @@ source ./$deployer/config.sh;
 # user=$(whoami);
 gitStorageLen=${#gitServerAllPrefixes[@]};
 for (( i=0; i < $gitStorageLen; i++  )); do
-  if  [[ ${gitServerAllPrefixes[$i]} == $fetchSeverPrefix ]]; then
-   localRepoServerPathPrefix=${gitServerAllPrefixes[$i]};
-   # 以下下行实现在没有all远程别名的情况下将config.sh中的fetchServerPrefix设为默认的fetch-url;
-   # 如果现已有all远程别名,还是改.git/config比较方便，毕竟这种情况不会经常发生。
-    temp=${gitServerAllPrefixes[$i]};
-    ${gitServerAllPrefixes[$i]}=${gitServerAllPrefixes[0]};
-    ${gitServerAllPrefixes[$0]}=temp;
-   echo
+  if  [[ ${gitServerAllPrefixes[$i]} =~ git@localhost\.*|git@127.0.0.1\.* ]]; then
+    localRepoServerPathPrefix=${gitServerAllPrefixes[$i]};
   fi
   echo This gitServerPrefixes will be mapped: ${gitServerAllPrefixes[$i]};
 done
@@ -78,8 +72,7 @@ function gitHandleUrl(){
         if [[  $(git remote | grep '^all') ]]; then
           git remote set-url --add all $1;
         else
-          git remote add all $fetchSeverPrefix/$repoName.git;
-          git remote -v;
+          git remote add all $1;
         fi;
       fi
     else
@@ -102,6 +95,7 @@ function gitHandleUrl(){
 
 for (( i=0; i < $gitStorageLen; i++  )); do
   if  [[ ${gitServerAllPrefixes[$i]} =~ git@localhost\.*|git@127.0.0.1\.* ]]; then
+    echo ${gitServerAllPrefixes[$i]} '94---------&&&&################';
     gitInitIfNoBranchAll;
     gitHandleUrl ${gitServerAllPrefixes[$i]}/$repoName.git;
     git remote -v | grep ${gitServerAllPrefixes[$i]};
@@ -239,10 +233,6 @@ function exitIfreadNoNeed(){
     fi
   done
 }
-
-# 设置 remote fetch url;
-
-
 echo -n "要提交添加工作区修改，提交提交到暂存区，并推送到到映射　'all'　的所有远程 master 分支吗？  [ yes / no ]:   ";
 exitIfreadNoNeed;
 #　提交并推送到到映射　\'all\'　的所有远程 master 分支；
