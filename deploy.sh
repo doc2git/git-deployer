@@ -162,7 +162,6 @@ for line in $(git remote -v | grep ' (push)' | awk '{print $2}'); do
       break; # 当前git仓库前缀已经匹配上了，就不选后边的仓库循环名了
 done;
 
-echo $veroseLength, '198======';
 for ((m=0; m < $verboseLength; m++)); do
    echo -n "Checked ${verboseUris[$verboseLenth]} is verbose, would you like to delte this one?  [ yes / no ]:  ";
    deleteThisUrl ${verboseUris[$m]};
