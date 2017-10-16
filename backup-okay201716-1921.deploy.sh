@@ -105,25 +105,55 @@ for (( i=0; i < $gitStorageLen; i++  )); do
     gitInitIfNoBranchAll;
     gitHandleUrl ${gitServerAllPrefixes[$i]}/$repoName.git;
     git remote -v | grep ${gitServerAllPrefixes[$i]};
+    echo '98%%%%%%%%%%';
+    # git remote add all ${gitServerAllPrefixes[$i]}/$repoName.git;
   else
     echo -n "Is the uninitialized repository ${gitServerAllPrefixes[$i]}/$repoName.git ready?  [ yes / no ]:  "
     addMapIfCreated ${gitServerAllPrefixes[$i]};	
   fi
 done
 
+
+# exit 154;
+ 
+#githubRepo=git@github.com:doc2git/$repoName.git
+#giteeRepo=git@gitee.com:doc2git/$repoName.git
+#
+#repoClientDir=$1/$repoName
+#cd $repoClientDir
+#git remote rename origin all
+#git remote set-url all --add $githubRepo
+#git remote set-url all --add $giteeRepo
+
 git remote -v
+
+# 做一次提交，将所有 remote Repo 初始化;
+# sult.txt　文件是确保所有 commit 和　push 与上一个版本不同的盐
+
 
 # 如果localRepoServerPath不存在,就创建本地git--bare库的;
 if [ ! -d $localRepoServerPath ]; then
 
   su git -c "mkdir $localRepoServerPath"
   judgeLatestCmd '创建repo失败'
- 
+#  if [ $? -ne 0 ]; then
+#    echo 创建repo失败
+#    exit 1
+#  fi
+  
   sudo sh -c "cd $localRepoServerPath; git init --bare"
   judgeLatestCmd '初始化  repo server  失败'
-  
+#  if [ $? -ne 0 ]; then
+#    echo 
+#    exit 1
+#  fi
+#  
   sudo sh -c "chown git:git $localRepoServerPath -R"
   judgeLatestCmd '将该repo的所属用户和组修改为 git:git 失败'
+#  if [ $? -ne 0 ]; then
+#    echo　
+#    exit 1
+#  fi
 fi
 
 
@@ -139,15 +169,20 @@ function deleteThisUrl(){
     fi
   done
 }
+echo $gitStorageLen '34&&&&&&&&&&&&&&&&&&';
   # remove repeat; 
   # remote uri去重
 declare -a disMatched;
 declare -a verboseUris;
 declare -a uniqueUris;
+echo ${#disMatchedUris[@]} '++++++++++++++++++++++))';
 uniqueLength=0;
 verboseLength=0;
 # for line in $(git remote -v | grep 'git (push)' | awk '{print $2}'); do
 for line in $(git remote -v | grep ' (push)' | awk '{print $2}'); do
+  # for (( i=0; i < $gitStorageLen; i++  )); do
+  #  echo ${gitServerAllPrefixes[$i]} '178*********';
+  #  if [[ ! $line =~ "${gitServerAllPrefixes[$i]}" ]]; then
        for (( n=0; n <= $uniqueLength; n++)); do
         if [[ $line == ${uniqueUris[$n]} ]]; then
           verboseUris[$verboseLength]=$line;
@@ -161,7 +196,10 @@ for line in $(git remote -v | grep ' (push)' | awk '{print $2}'); do
           continue;
         fi;
        done;
+      echo "   ${#verboseUris[@]} 174++++++++++++++++++++++))";
       break; # 当前git仓库前缀已经匹配上了，就不选后边的仓库循环名了
+   # fi
+  # done;
 done;
 
 echo $veroseLength, '198======';
@@ -187,6 +225,7 @@ for line in $(git remote -v | grep ' (push)' | awk '{print $2}'); do
   fi
 done;
 
+# exit 183;
 
 function exitIfreadNoNeed(){
   while [[ true ]]; do

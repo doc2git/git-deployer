@@ -18,7 +18,7 @@ gitServerAllPrefixes[2]="git@gitee.com:$user";
 # 如果现已有all远程别名,还是改.git/config比较方便(将要设置的默认url放在最前面)，毕竟这种情况不会经常发生。tchSeverPrefix="git@github.com:$user";
 
 # example:
-fetchSeverPrefix=${gitServerAllPrefixes[1]};
-# fetchSeverPrefix=git@localhost:/home/myrepository;
+# fetchSeverPrefix=${gitServerAllPrefixes[1]};
+fetchSeverPrefix=git@localhost:/home/myrepository;
 
 
