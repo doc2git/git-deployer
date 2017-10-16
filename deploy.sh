@@ -7,8 +7,12 @@ source ./$deployer/config.sh;
 # user=$(whoami);
 gitStorageLen=${#gitServerAllPrefixes[@]};
 for (( i=0; i < $gitStorageLen; i++  )); do
-  if  [[ ${gitServerAllPrefixes[$i]} =~ git@localhost\.*|git@127.0.0.1\.* ]]; then
-    localRepoServerPathPrefix=${gitServerAllPrefixes[$i]};
+  if  [[ ${gitServerAllPrefixes[$i]} = fetchSeverPrefix ]]; then
+   # localRepoServerPathPrefix=${gitServerAllPrefixes[$i]};
+   # 以下下行实现将config.sh中的fetchServerPrefix设为默认的fetch-url;
+   temp=${gitServerAllPrefixes[$i]};
+   ${gitServerAllPrefixes[$i]}=${gitServerAllPrefixes[0]};
+   ${gitServerAllPrefixes[$0]}=temp;
   fi
   echo This gitServerPrefixes will be mapped: ${gitServerAllPrefixes[$i]};
 done
@@ -233,6 +237,10 @@ function exitIfreadNoNeed(){
     fi
   done
 }
+
+# 设置 remote fetch url;
+
+
 echo -n "要提交添加工作区修改，提交提交到暂存区，并推送到到映射　'all'　的所有远程 master 分支吗？  [ yes / no ]:   ";
 exitIfreadNoNeed;
 #　提交并推送到到映射　\'all\'　的所有远程 master 分支；

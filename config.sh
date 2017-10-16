@@ -13,5 +13,6 @@ gitServerAllPrefixes[0]="git@localhost:/home/myrepository";
 user=$(whoami);
 gitServerAllPrefixes[1]="git@github.com:$user";
 gitServerAllPrefixes[2]="git@gitee.com:$user";
+fetchSeverPrefix="git@localhost:/home/myrepository":
 
 
