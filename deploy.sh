@@ -35,7 +35,7 @@ function deleteThisUrl(){
 }
 echo $gitStorageLen '34&&&&&&&&&&&&&&&&&&';
   # remove repeat; # If url matches rule, remove it; 
-for line in $(git remote -v | awk '{print $2}'); do
+for line in $(git remote -v | grep 'git (push)' | awk '{print $2}'); do
   for (( i=0; i <= $gitStorageLen; i++  )); do
     if [[ $line != "${gitServerAllPrefixes[$i]}*" ]]; then
       echo -n "$line is not match any specialed gitStorage, would you like to delte this one?  [ yes / no ]:  ";
