@@ -5,6 +5,7 @@ deployer="git-deployer";
 source ./$deployer/config.sh;
 
 # user=$(whoami);
+gitStorageLen=${#gitServerAllPrefixes[@]};
 for (( i=0; i < $gitStorageLen; i++  )); do
   if  [[ ${gitServerAllPrefixes[$i]} =~ git@localhost\.*|git@127.0.0.1\.* ]]; then
     localRepoServerPathPrefix=${gitServerAllPrefixes[$i]};
@@ -19,7 +20,6 @@ echo 项目根目录: $rootDir;
 repoName=$(basename $rootDir);
 echo 正在测试的repo名: $repoName;
 localRepoServerPath="$localRepoServerPathParent/$repoName.git";
-gitStorageLen=${#gitServerAllPrefixes[@]};
 
 
 
@@ -164,18 +164,43 @@ function deleteThisUrl(){
   done
 }
 echo $gitStorageLen '34&&&&&&&&&&&&&&&&&&';
-  # remove repeat; # If url matches rule, remove it; 
-for line in $(git remote -v | grep 'git (push)' | awk '{print $2}'); do
+  # remove repeat; 
+  # remote uri去重
+declare -a disMatched;
+declare -a verboseUris;
+declare -a uniqueUris;
+echo ${#disMatchedUris[@]} '++++++++++++++++++++++))';
+uniqueLength=0;
+verboseLength=0;
+# for line in $(git remote -v | grep 'git (push)' | awk '{print $2}'); do
+for line in $(git remote -v | grep ' (push)' | awk '{print $2}'); do
   for (( i=0; i < $gitStorageLen; i++  )); do
     if [[ ! $line =~ "${gitServerAllPrefixes[$i]}" ]]; then
-      echo -n "$line is not match any specialed gitStorage, would you like to delte this one?  [ yes / no ]:  ";
-      deleteThisUrl $line;
-      break;
-    fi;
+       for (( n=0; n <= $uniqueLength; n++)); do
+        if [[ $line == ${uniqueUris[$n]} ]]; then
+          verboseUris[$verboseLength]=$line;
+          verboseLength=$verboseLength+1;
+          echo -n added verboseUri: ${verboseUris[${#verboseUris[@]} - 1]};
+        else
+          uniqueUris[$uniqueLength]=$line;
+          uniqueLenght=$uniqueLength+1;
+          n=$n+1; #因为$uniqueUris数组多了一个成员，不加1就无限循环
+          echo -n added uniqueUri: $line;
+          continue;
+        fi;
+       done;
+      echo "   ${#verboseUris[@]} 174++++++++++++++++++++++))";
+      break; # 当前git仓库前缀已经匹配上了，就不选后边的仓库循环名了
+    fi
   done;
-  # echo ${#remoteUrls[@]};
 done;
 
+echo $veroseLength, '198======';
+for ((m=0; m < $verboseLength; m++)); do
+   echo -n "Checked ${verboseUris[$verboseLenth]} is verbose, would you like to delte this one?  [ yes / no ]:  ";
+   deleteThisUrl ${verboseUris[$m]};
+done
+# exit 183;
 
 
 function exitIfreadNoNeed(){
