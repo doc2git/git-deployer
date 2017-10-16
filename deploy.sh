@@ -7,12 +7,14 @@ source ./$deployer/config.sh;
 # user=$(whoami);
 gitStorageLen=${#gitServerAllPrefixes[@]};
 for (( i=0; i < $gitStorageLen; i++  )); do
-  if  [[ ${gitServerAllPrefixes[$i]} = fetchSeverPrefix ]]; then
+  if  [[ ${gitServerAllPrefixes[$i]} == $fetchSeverPrefix ]]; then
    # localRepoServerPathPrefix=${gitServerAllPrefixes[$i]};
-   # 以下下行实现将config.sh中的fetchServerPrefix设为默认的fetch-url;
-   temp=${gitServerAllPrefixes[$i]};
-   ${gitServerAllPrefixes[$i]}=${gitServerAllPrefixes[0]};
-   ${gitServerAllPrefixes[$0]}=temp;
+   # 以下下行实现在没有all远程别名的情况下将config.sh中的fetchServerPrefix设为默认的fetch-url;
+   # 如果现已有all远程别名,还是改.git/config比较方便，毕竟这种情况不会经常发生。
+   # temp=${gitServerAllPrefixes[$i]};
+   # ${gitServerAllPrefixes[$i]}=${gitServerAllPrefixes[0]};
+   # ${gitServerAllPrefixes[$0]}=temp;
+   echo
   fi
   echo This gitServerPrefixes will be mapped: ${gitServerAllPrefixes[$i]};
 done
@@ -76,7 +78,7 @@ function gitHandleUrl(){
         if [[  $(git remote | grep '^all') ]]; then
           git remote set-url --add all $1;
         else
-          git remote add all $1;
+          git remote add all $fetchSeverPrefix/$repoName.git;
         fi;
       fi
     else

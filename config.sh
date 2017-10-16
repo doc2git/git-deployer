@@ -13,6 +13,9 @@ gitServerAllPrefixes[0]="git@localhost:/home/myrepository";
 user=$(whoami);
 gitServerAllPrefixes[1]="git@github.com:$user";
 gitServerAllPrefixes[2]="git@gitee.com:$user";
-fetchSeverPrefix="git@localhost:/home/myrepository":
 
+# 配置fetchServerPrefix可以实现在没有all远程别名的情况下将config.sh中的fetchServerPrefix设为默认的fetch-url;
+# 如果现已有all远程别名,还是改.git/config比较方便，毕竟这种情况不会经常发生。tchSeverPrefix="git@github.com:$user";
+
+fetchSeverPrefix=gitServerAllPrefixes[1];
 
