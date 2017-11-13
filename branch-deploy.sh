@@ -13,7 +13,7 @@ fi
 
 #  创建并切换到 \'gh-pages\'　分支; 提交并推送到到映射　\'all\'　的所有远程 \'gh-pages\' 分支；
 git checkout ${inputedBranch};
-if [[ $? -ne 0 ]]; then
+if [ $? -ne 0 ]; then
   git branch ${inputedBranch};  git checkout ${inputedBranch};
 fi
 echo salt >> salt.txt; git add .; git commit -am `date +%s%N`;
